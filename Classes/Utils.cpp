@@ -24,4 +24,13 @@ int Utils::random_range(int low,int high){
 	return rand()%(high-low+1) + low;
 }
 
+float Utils::frandom(){
+	return (float)rand()/UINT64_C(0x100000000);
+}
+
+float Utils::frandom_range( float low,float high )
+{
+	return (high-low)*frandom() + low;
+}
+
 NS_AK_END
