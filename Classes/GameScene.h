@@ -5,7 +5,7 @@
 #include "GameLayer.h"
 #include "HudLayer.h"
 
-class GameScene : public cocos2d::CCLayer
+class GameScene : public cocos2d::CCScene
 {
 protected:
 	CC_SYNTHESIZE_RETAIN(GameLayer*,gameLayer,GameLayer);
@@ -17,13 +17,13 @@ public:
 	virtual bool init();  
 
 	// there's no 'id' in cpp, so we recommend returning the class instance pointer
-	static cocos2d::CCScene* scene();
+	//static cocos2d::CCScene* scene();
 
-	// a selector callback
-	void menuCloseCallback(CCObject* pSender);
+	//// a selector callback
+	//void menuCloseCallback(CCObject* pSender);
 
 	// implement the "static node()" method manually
-	CREATE_FUNC(HelloWorld);
+	CREATE_FUNC(GameScene);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

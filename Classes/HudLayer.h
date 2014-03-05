@@ -6,6 +6,8 @@
 class HudLayer : public cocos2d::CCLayer
 {
 public:
+	bool init();
+	CREATE_FUNC(HudLayer);
 protected:
 private:
 };
