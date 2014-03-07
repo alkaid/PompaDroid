@@ -26,7 +26,7 @@ bool Hero::init()
 			idelFrmaes->addObject(frame);
 		}
 		CCAnimation *idelAnimation=CCAnimation::createWithSpriteFrames(idelFrmaes,1.0/12.0);
-		//TODO 持有CCAction的引用后，Hero对象无法自动回收 点解？
+		//TODO 持有CCAction的引用后，Hero对象无法自动回收 点解？::其实是由于CCCallFunc引用了Hero对象造成循环引用
 		this->setIdleAction(CCRepeatForever::create(CCAnimate::create(idelAnimation)));
 		//attack action
 		CCArray *attackFrames=CCArray::createWithCapacity(3);

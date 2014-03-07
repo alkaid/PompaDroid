@@ -37,6 +37,7 @@ public:
 	void knockedOut();
 	//scheduler
 	void update(float dt);
+	virtual void cleanup();
 };
 
 #endif

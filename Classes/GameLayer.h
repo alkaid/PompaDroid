@@ -23,6 +23,7 @@ private:
 	Hero *_hero;
 	int _updateCount;
 	TestNode* _testNode;
+	cocos2d::CCAction* _testAction;
 };
 
 #endif

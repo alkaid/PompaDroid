@@ -39,10 +39,10 @@ void GameLayer::initTilemap(){
 void GameLayer::initHero()
 {
 	_hero=Hero::create();
-	//_actors->addChild(_hero);
+	_actors->addChild(_hero);
 	_hero->setPosition(ccp(_hero->getCenter2Sides(),_hero->getCenter2Bottom()+10));
 	_hero->setDesiredPosition(_hero->getPosition());
-	//_hero->idle();
+	_hero->idle();
 	
 }
 
@@ -52,13 +52,18 @@ void GameLayer::ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEven
 
 void GameLayer::update( float dt )
 {
-	++_updateCount;
-	if(_updateCount<12)
-	CCLOG("frame %d ....",_updateCount);
-	if (_updateCount==10)
-	{
-		CCLOG("remove hero",_updateCount);
-		//_actors->removeChild(_hero,true);
-		//this->removeChild(_testNode);
-	}
+	//++_updateCount;
+	//if(_updateCount<12)
+	//CCLOG("frame %d ....",_updateCount);
+	//if (_updateCount==2)
+	//{
+	//	//CCTextureCache::sharedTextureCache()->dumpCachedTextureInfo();
+	//	//CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+	//}
+	//if (_updateCount==10)
+	//{
+	//	CCLOG("remove hero",_updateCount);
+	//	_actors->removeChild(_hero,true);
+	//	//this->removeChild(_testNode);
+	//}
 }

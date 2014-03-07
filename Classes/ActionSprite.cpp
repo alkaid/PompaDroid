@@ -64,6 +64,16 @@ void ActionSprite::knockedOut()
 
 }
 
+void ActionSprite::cleanup()
+{
+	CC_SAFE_RELEASE_NULL(_idleAction);
+	CC_SAFE_RELEASE_NULL(_attackAction);
+	CC_SAFE_RELEASE_NULL(_hurtAction);
+	CC_SAFE_RELEASE_NULL(_walkAction);
+	CC_SAFE_RELEASE_NULL(_knockedOutAction);
+	CCSprite::cleanup();
+}
+
 
 
 
