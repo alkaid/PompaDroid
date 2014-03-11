@@ -3,12 +3,13 @@
 USING_NS_CC;
 
 GameScene::GameScene(void){
-	gameLayer=NULL;
-	hudLayer=NULL;
+	_gameLayer=NULL;
+	_hudLayer=NULL;
 }
 
 GameScene::~GameScene(void){
-	
+	setGameLayer(NULL);
+	setHudLayer(NULL);
 }
 
 bool GameScene::init(){
@@ -16,10 +17,11 @@ bool GameScene::init(){
 	do 
 	{
 		CC_BREAK_IF(!CCScene::init());
-		gameLayer=GameLayer::create();
-		hudLayer=HudLayer::create();
-		this->addChild(gameLayer,0);
-		this->addChild(hudLayer,1);
+		_gameLayer=GameLayer::create();
+		_hudLayer=HudLayer::create();
+		this->addChild(_gameLayer,0);
+		this->addChild(_hudLayer,1);
+		_hudLayer->getPad()->setDelegate(_gameLayer);
 		bRet=true;
 	} while (0);
 	return bRet;

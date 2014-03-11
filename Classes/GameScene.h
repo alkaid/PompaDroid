@@ -8,8 +8,8 @@
 class GameScene : public cocos2d::CCScene
 {
 protected:
-	CC_SYNTHESIZE_RETAIN(GameLayer*,gameLayer,GameLayer);
-	CC_SYNTHESIZE_RETAIN(HudLayer*,hudLayer,HudLayer);
+	CC_SYNTHESIZE_RETAIN(GameLayer*,_gameLayer,GameLayer);
+	CC_SYNTHESIZE_RETAIN(HudLayer*,_hudLayer,HudLayer);
 public:
 	GameScene(void);
 	virtual ~GameScene(void);

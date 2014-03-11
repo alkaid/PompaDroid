@@ -20,11 +20,13 @@ protected:
 	bool _isHold;
 	float _radius;
 	CCPoint _direction;
-	CC_SYNTHESIZE_RETAIN(SimpleDPadDelegate*,_simpleDPadDelegate,SimpleDPadDelegate);
+	CC_SYNTHESIZE(SimpleDPadDelegate*,_delegate,Delegate);
 
 public:
 	SimpleDPad();
 	virtual ~SimpleDPad();
+	virtual bool initWithFile(CCString* fileName,float radius);
+	static SimpleDPad* dPadWithFile(CCString* fileName,float radius);
 
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
 	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);

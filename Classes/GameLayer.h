@@ -4,8 +4,9 @@
 #include "cocos2d.h"
 #include "Hero.h"
 #include "TestNode.h"
+#include "SimpleDPad.h"
 
-class GameLayer : public cocos2d::CCLayer
+class GameLayer : public cocos2d::CCLayer,public SimpleDPadDelegate
 {
 public:
 	CREATE_FUNC(GameLayer);
@@ -15,6 +16,10 @@ public:
 	virtual void ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent);
 	//scheduler
 	void update(float dt);
+
+	virtual void onDirectionChanged(SimpleDPad* simpleDPad,cocos2d::CCPoint direction);
+	virtual void onHoldingDirection(SimpleDPad* simpleDPad,cocos2d::CCPoint direction);
+	virtual void onTouchEnded(SimpleDPad* simpleDPad);
 protected:
 
 private:

@@ -67,3 +67,18 @@ void GameLayer::update( float dt )
 	//	//this->removeChild(_testNode);
 	//}
 }
+
+void GameLayer::onDirectionChanged( SimpleDPad* simpleDPad,cocos2d::CCPoint direction )
+{
+
+}
+
+void GameLayer::onHoldingDirection( SimpleDPad* simpleDPad,cocos2d::CCPoint direction )
+{
+
+}
+
+void GameLayer::onTouchEnded( SimpleDPad* simpleDPad )
+{
+
+}
