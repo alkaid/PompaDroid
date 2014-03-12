@@ -8,8 +8,7 @@ GameScene::GameScene(void){
 }
 
 GameScene::~GameScene(void){
-	setGameLayer(NULL);
-	setHudLayer(NULL);
+	
 }
 
 bool GameScene::init(){
