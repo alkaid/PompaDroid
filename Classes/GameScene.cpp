@@ -18,6 +18,7 @@ bool GameScene::init(){
 		CC_BREAK_IF(!CCScene::init());
 		_gameLayer=GameLayer::create();
 		_hudLayer=HudLayer::create();
+		_gameLayer->setHudLayer(_hudLayer);
 		this->addChild(_gameLayer,0);
 		this->addChild(_hudLayer,1);
 		_hudLayer->getPad()->setDelegate(_gameLayer);

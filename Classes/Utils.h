@@ -33,4 +33,5 @@ typedef struct _BoundingBox{
 	cocos2d::CCRect original;
 } BoundingBox;
 
+
 NS_AK_END

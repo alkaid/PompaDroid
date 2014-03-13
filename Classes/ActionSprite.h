@@ -7,6 +7,7 @@
 class ActionSprite : public cocos2d::CCSprite
 {
 protected:
+	void transformBoxes();
 	//Action
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCAction*,_idleAction,IdleAction);
 	CC_SYNTHESIZE_RETAIN(cocos2d::CCAction*,_walkAction,WalkAction);
@@ -25,6 +26,9 @@ protected:
 	//measurements
 	CC_SYNTHESIZE(float,_center2Sides,Center2Sides);
 	CC_SYNTHESIZE(float,_center2Bottom,Center2Bottom);
+	//boundingBox
+	CC_SYNTHESIZE(alkaid::BoundingBox,_hitBox,HitBox);
+	CC_SYNTHESIZE(alkaid::BoundingBox,_attackBox,AttackBox);
 public:
 	//struct
 	ActionSprite(void);
@@ -38,6 +42,10 @@ public:
 	//scheduler
 	void update(float dt);
 	virtual void cleanup();
+	alkaid::BoundingBox createBoundingBox(cocos2d::CCPoint origin,cocos2d::CCSize size);
+	virtual void setPosition(const cocos2d::CCPoint& pos);
+
+	
 };
 
 #endif

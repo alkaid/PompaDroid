@@ -1,14 +1,17 @@
 #include "GameLayer.h"
+#include "GameScene.h"
 
 USING_NS_CC;
 USING_NS_AK;
 
 GameLayer::GameLayer(){
 	_robots=NULL;
+	_hudLayer=NULL;
 }
 GameLayer::~GameLayer(){
 	this->unscheduleUpdate();
 	this->setRobots(NULL);
+	this->setHudLayer(NULL);
 }
 
 bool GameLayer::init(){
@@ -58,6 +61,20 @@ void GameLayer::initHero()
 
 void GameLayer::ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent){
 	_hero->attack();
+	if(_hero->getActionState()==kActionStateAttack){
+		CCObject *pobj=NULL;
+		CCARRAY_FOREACH(_robots,pobj){
+			Robot *robot=(Robot*)pobj;
+			if(robot->getActionState()!=kActionStateKnockOut){
+				//hero与enemy y轴上是否在可攻击范围(同一行)
+				if(fabs(_hero->getPositionY()-robot->getPositionY())<10){
+					if(_hero->getAttackBox().actual.intersectsRect(robot->getHitBox().actual)){
+						robot->hurtWithDamage(_hero->getDamage());
+					}
+				}
+			}
+		}
+	}
 }
 
 void GameLayer::update( float dt )
@@ -77,9 +94,8 @@ void GameLayer::update( float dt )
 	//	//this->removeChild(_testNode);
 	//}
 	_hero->update(dt);
-	float posY=MIN(MAX(_hero->getCenter2Bottom(),_hero->getDesiredPosition().y),_tileMap->getTileSize().height*3+_hero->getCenter2Bottom());
-	float posX=MIN(MAX(_hero->getCenter2Sides(),_hero->getDesiredPosition().x),_tileMap->getTileSize().width*_tileMap->getMapSize().width-_hero->getCenter2Sides());
-	_hero->setPosition(ccp(posX, posY));
+	this->updateRobots(dt);
+	this->updatePositions();
 	this->reorderActors();
 	this->setViewpointCenter(_hero->getPosition());
 }
@@ -119,7 +135,7 @@ void GameLayer::initRobots()
 	for(int i=0;i<50;i++){
 		Robot* robot=Robot::create();
 		_actors->addChild(robot);
-		int minX=robot->getCenter2Sides();
+		int minX=Utils::getVisualSize().width;
 		int maxX=_tileMap->getTileSize().width*_tileMap->getMapSize().width-robot->getCenter2Sides();
 		int minY=robot->getCenter2Bottom();
 		int maxY=_tileMap->getTileSize().height*3+robot->getCenter2Bottom();
@@ -138,4 +154,90 @@ void GameLayer::reorderActors()
 		CCSprite* sprite=(CCSprite*)pObj;
 		_actors->reorderChild(sprite,-sprite->getPositionY());
 	}
+}
+
+void GameLayer::updatePositions()
+{
+	float posY=MIN(MAX(_hero->getCenter2Bottom(),_hero->getDesiredPosition().y),_tileMap->getTileSize().height*3+_hero->getCenter2Bottom());
+	float posX=MIN(MAX(_hero->getCenter2Sides(),_hero->getDesiredPosition().x),_tileMap->getTileSize().width*_tileMap->getMapSize().width-_hero->getCenter2Sides());
+	_hero->setPosition(ccp(posX, posY));
+	CCObject* pobj=NULL;
+	CCARRAY_FOREACH(_robots,pobj){
+		Robot* robot=(Robot*)pobj;
+		float posY=MIN(MAX(robot->getCenter2Bottom(),robot->getDesiredPosition().y),_tileMap->getTileSize().height*3+robot->getCenter2Bottom());
+		float posX=MIN(MAX(robot->getCenter2Sides(),robot->getDesiredPosition().x),_tileMap->getTileSize().width*_tileMap->getMapSize().width-robot->getCenter2Sides());
+		robot->setPosition(ccp(posX, posY));
+	}
+}
+
+void GameLayer::updateRobots(float dt)
+{
+	int alive=0;
+	int randomChoice=0;
+	CCObject* pobj=NULL;
+	CCARRAY_FOREACH(_robots,pobj){
+		Robot* robot=(Robot*)pobj;
+		robot->update(dt);
+		if(robot->getActionState()!=kActionStateKnockOut){
+			//1  alive enemy计数
+			++alive;
+			//2  
+			if(Utils::currentTime()>robot->getNextDecisionTime()){
+				robot->setNextDecisionTime(Utils::frandom_range(0.1,0.5)*1000+Utils::currentTime());
+				float distanceSQ=ccpDistanceSQ(_hero->getPosition(),robot->getPosition());
+				//hero 和robot的距离在robot攻击范围内 策略1 attack  策略2 idel
+				if(distanceSQ<50*50){
+					randomChoice=Utils::random_range(0,1);
+					switch(randomChoice){
+					case 1:
+						robot->setFlipX(_hero->getPositionX()<robot->getPositionX());
+						robot->setNextDecisionTime(Utils::frandom_range(0.1,0.5)*2000+Utils::currentTime());
+						robot->attack();
+						if(robot->getActionState()==kActionStateAttack){
+							if(fabs(robot->getPositionY()-_hero->getPositionY())<10){
+								if(robot->getAttackBox().actual.intersectsRect(_hero->getHitBox().actual)){
+									_hero->hurtWithDamage(robot->getDamage());
+								}
+							}
+						}
+
+						break;
+					default:
+						robot->idle();
+						break;
+					}
+				}else if(distanceSQ<Utils::getVisualSize().width*Utils::getVisualSize().width){
+					robot->setNextDecisionTime(Utils::frandom_range(0.1,0.5)*4000+Utils::currentTime());
+					randomChoice=Utils::random_range(0,1);
+					if(randomChoice==1){
+						CCPoint direction=ccpNormalize(ccpSub(_hero->getPosition(),robot->getPosition()));
+						robot->walkWithDirection(direction);
+					}else{
+						robot->idle();
+					}
+				}
+			}
+
+
+		}
+	}
+	//check end game
+	if(_hudLayer->getChildByTag(5)==NULL && ( alive<=0||_hero->getActionState()==kActionStateKnockOut )){
+		endGame();
+	}
+}
+
+void GameLayer::endGame()
+{
+	CCLabelTTF *restartLabel = CCLabelTTF::create("RESTART", "Arial", 30);
+	CCMenuItemLabel *restartItem = CCMenuItemLabel::create(restartLabel, this, menu_selector(GameLayer::restartGame));
+	CCMenu *menu = CCMenu::create(restartItem, NULL);
+	menu->setPosition(Utils::getCenter());
+	menu->setTag(5);
+	_hudLayer->addChild(menu, 5);
+}
+
+void GameLayer::restartGame(CCObject* pSender)
+{
+	CCDirector::sharedDirector()->replaceScene(GameScene::create());
 }

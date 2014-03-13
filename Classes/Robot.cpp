@@ -26,7 +26,7 @@ bool Robot::init()
 		{
 			walkFrames->addObject(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("robot_walk_%02d.png",i)->getCString()));
 		}
-		this->setWalkAction(CCRepeatForever::create(CCAnimate::create(CCAnimation::createWithSpriteFrames(walkFrames))));
+		this->setWalkAction(CCRepeatForever::create(CCAnimate::create(CCAnimation::createWithSpriteFrames(walkFrames,1.0/12.0))));
 		//hurt action
 		CCArray *hurtFrames=CCArray::createWithCapacity(3);
 		for(int i=0;i<3;i++){
@@ -34,8 +34,8 @@ bool Robot::init()
 		}
 		this->setHurtAction(CCSequence::create(CCAnimate::create(CCAnimation::createWithSpriteFrames(hurtFrames,1.0/12.0)),CCCallFunc::create(this,callfunc_selector(Robot::idle)),NULL));
 		//knockedout action
-		CCArray *knockedOutFrames=CCArray::createWithCapacity(3);
-		for(int i=0;i<3;i++){
+		CCArray *knockedOutFrames=CCArray::createWithCapacity(5);
+		for(int i=0;i<5;i++){
 			knockedOutFrames->addObject(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("robot_knockout_%02d.png",i)->getCString()));
 		}
 		this->setKnockedOutAction(CCSequence::create(CCAnimate::create(CCAnimation::createWithSpriteFrames(knockedOutFrames,1.0/12.0)),CCBlink::create(2,10),NULL));
@@ -45,6 +45,11 @@ bool Robot::init()
 		this->setHitPoints(100.0);
 		this->setDamage(10.0);
 		this->setWalkSpeed(80.0);
+
+		_hitBox=this->createBoundingBox(ccp(-_center2Sides,-_center2Bottom),CCSizeMake(_center2Sides*2,_center2Bottom*2));
+		_attackBox=this->createBoundingBox(ccp(_center2Sides,-_center2Bottom+24),CCSizeMake(25,20));
+
+		this->setNextDecisionTime(0);
 
 		bRet=true;
 	} while (0);

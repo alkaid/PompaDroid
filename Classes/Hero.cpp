@@ -47,8 +47,8 @@ bool Hero::init()
 		}
 		this->setHurtAction(CCSequence::create(CCAnimate::create(CCAnimation::createWithSpriteFrames(hurtFrames,1.0/12.0)),CCCallFunc::create(this,callfunc_selector(Hero::idle)),NULL));
 		//knockedout action
-		CCArray *knockedOutFrames=CCArray::createWithCapacity(3);
-		for(int i=0;i<3;i++){
+		CCArray *knockedOutFrames=CCArray::createWithCapacity(5);
+		for(int i=0;i<5;i++){
 			knockedOutFrames->addObject(CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("hero_knockout_%02d.png",i)->getCString()));
 		}
 		this->setKnockedOutAction(CCSequence::create(CCAnimate::create(CCAnimation::createWithSpriteFrames(knockedOutFrames,1.0/12.0)),CCBlink::create(2,10),NULL));
@@ -58,6 +58,9 @@ bool Hero::init()
 		this->setHitPoints(100.0);
 		this->setDamage(20.0);
 		this->setWalkSpeed(80.0);
+
+		_hitBox=this->createBoundingBox(ccp(-_center2Sides,-_center2Bottom),CCSizeMake(_center2Sides*2,_center2Bottom*2));
+		_attackBox=this->createBoundingBox(ccp(_center2Sides,-_center2Bottom+29),CCSizeMake(20,20));
 
 		this->setTestNode(TestNode::create());
 		bRet=true;

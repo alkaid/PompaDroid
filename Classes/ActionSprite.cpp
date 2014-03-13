@@ -102,6 +102,33 @@ void ActionSprite::cleanup()
 	CCSprite::cleanup();
 }
 
+alkaid::BoundingBox ActionSprite::createBoundingBox( CCPoint origin,CCSize size )
+{
+	BoundingBox boundingBox;
+	boundingBox.original.origin=origin;
+	boundingBox.original.size=size;
+	boundingBox.actual.origin=ccpAdd(this->getPosition(),origin);
+	boundingBox.actual.size=size;
+	return boundingBox;
+}
+
+void ActionSprite::transformBoxes()
+{
+	_hitBox.actual.origin=ccpAdd(this->getPosition(),_hitBox.original.origin);
+	_attackBox.actual.origin=ccpAdd(this->getPosition(),ccp(_attackBox.original.origin.x+ (this->isFlipX()?(-_attackBox.original.size.width-_hitBox.original.size.width):0) ,_attackBox.original.origin.y));
+	//TODO ccDrawRect方法只有重载CCNode的draw()里有效，那么如何画矩形？
+	//glLineWidth(10);
+	//ccDrawColor4B(255,0,0,255);
+	//ccDrawRect(_hitBox.actual.origin,ccp(_hitBox.actual.getMaxX(),_hitBox.actual.getMaxY()));
+	//ccDrawRect(_attackBox.actual.origin,ccp(_attackBox.actual.getMaxX(),_attackBox.actual.getMaxY()));
+}
+
+void ActionSprite::setPosition( const CCPoint& pos )
+{
+	CCSprite::setPosition(pos);
+	this->transformBoxes();
+}
+
 
 
 

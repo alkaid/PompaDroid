@@ -6,6 +6,7 @@
 #include "TestNode.h"
 #include "SimpleDPad.h"
 #include "Robot.h"
+#include "HudLayer.h"
 
 class GameLayer : public cocos2d::CCLayer,public SimpleDPadDelegate
 {
@@ -23,6 +24,7 @@ public:
 	virtual void onTouchEnded(SimpleDPad* simpleDPad);
 protected:
 	CC_SYNTHESIZE_RETAIN(CCArray*, _robots,Robots);
+	CC_SYNTHESIZE_RETAIN(HudLayer*,_hudLayer,HudLayer);
 private:
 	cocos2d::CCTMXTiledMap* _tileMap;
 	cocos2d::CCSpriteBatchNode* _actors;
@@ -36,6 +38,10 @@ private:
 	void initRobots();
 	void setViewpointCenter(cocos2d::CCPoint center);
 	void reorderActors();
+	void updatePositions();
+	void updateRobots(float dt);
+	void endGame();
+	void restartGame(cocos2d::CCObject* pSender);
 };
 
 #endif
