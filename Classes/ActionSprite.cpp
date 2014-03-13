@@ -1,4 +1,6 @@
 #include "ActionSprite.h"
+#include "Utils.h"
+#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 USING_NS_AK;
@@ -56,6 +58,10 @@ void ActionSprite::attack()
 void ActionSprite::hurtWithDamage( float damage )
 {
 	if(_actionState!=kActionStateKnockOut){
+		//play music effect
+		int randomSound = Utils:: random_range(0, 1);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(CCString::createWithFormat("Sounds/pd_hit%d.wav", randomSound)->getCString());
+
 		stopAllActions();
 		runAction(_hurtAction);
 		this->setActionState(kActionStateHurt);

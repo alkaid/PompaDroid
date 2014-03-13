@@ -1,5 +1,6 @@
 #include "Hero.h"
 #include "TestNode.h"
+#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 
@@ -71,4 +72,10 @@ bool Hero::init()
 void Hero::update( float dt )
 {
 	ActionSprite::update(dt);
+}
+
+void Hero::knockedOut()
+{
+	ActionSprite::knockedOut();
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("Sounds/pd_herodeath.wav");
 }

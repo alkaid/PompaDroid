@@ -15,4 +15,5 @@ public:
 	CREATE_FUNC(Hero);
 	//scheduler
 	void update(float dt);
+	virtual void knockedOut();
 };

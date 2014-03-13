@@ -10,4 +10,5 @@ protected:
 public:
 	bool init();
 	CREATE_FUNC(Robot);
+	virtual void knockedOut();
 };

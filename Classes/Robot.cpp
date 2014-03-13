@@ -1,4 +1,5 @@
 #include "Robot.h"
+#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 
@@ -54,5 +55,11 @@ bool Robot::init()
 		bRet=true;
 	} while (0);
 	return bRet;
+}
+
+void Robot::knockedOut()
+{
+	ActionSprite::knockedOut();
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("Sounds/pd_botdeath.wav");
 }
 

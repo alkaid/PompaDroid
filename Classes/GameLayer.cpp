@@ -1,5 +1,6 @@
 #include "GameLayer.h"
 #include "GameScene.h"
+#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 USING_NS_AK;
@@ -19,6 +20,14 @@ bool GameLayer::init(){
 	do 
 	{
 		CC_BREAK_IF(!CCLayer::init());
+		//LoadAudio
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->setBackgroundMusicVolume(0.5);//ÉèÖÃÒôÁ¿0.0-1.0
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadBackgroundMusic("Sounds/latin_industries.aifc");
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Sounds/latin_industries.aifc");
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("Sounds/pd_hit0.wav");
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("Sounds/pd_hit1.wav");
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("Sounds/pd_herodeath.wav");
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadEffect("Sounds/pd_botdeath.wav");
 		//test
 		_updateCount=0;
 		_testNode=NULL;

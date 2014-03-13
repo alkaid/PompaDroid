@@ -38,7 +38,7 @@ public:
 	void attack();
 	void hurtWithDamage(float damage);
 	void walkWithDirection(cocos2d::CCPoint direction);
-	void knockedOut();
+	virtual void knockedOut();
 	//scheduler
 	void update(float dt);
 	virtual void cleanup();
