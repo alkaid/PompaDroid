@@ -4,6 +4,11 @@
 
 NS_AK_BEGIN
 
+#ifndef UINT64_C
+//#define UINT64_C(val) val##ui64
+#define UINT64_C(val) val##ull
+#endif
+
 class Utils
 {
 public:
